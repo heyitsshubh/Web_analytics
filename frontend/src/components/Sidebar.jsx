@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom';
 const navItems = [
   {
-    to: '/',
+    to: '/dashboard',
     label: 'Overview',
     icon: (
       <svg className="w-4.5 h-4.5" viewBox="0 0 20 20" fill="currentColor">
