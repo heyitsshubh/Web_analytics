@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing — TechCorp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #6366f1; --secondary: #8b5cf6;
+      --bg: #0f0f17; --card: #1e1e2e; --border: #2d2d45;
+      --text: #e2e8f0; --muted: #94a3b8; --radius: 16px;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 64px;
+      background: rgba(15,15,23,0.9); border-bottom: 1px solid var(--border);
+    }
+    .logo { font-size: 1.2rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-links { display: flex; gap: 1.5rem; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    section { padding: 60px 5%; max-width: 1100px; margin: 0 auto; }
+    h1 { font-size: 2.5rem; font-weight: 800; text-align: center; margin-bottom: 12px;
+      background: linear-gradient(135deg, #e2e8f0, #818cf8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { text-align: center; color: var(--muted); margin-bottom: 48px; font-size: 1rem; }
+    .toggle-wrap { display: flex; justify-content: center; gap: 0; margin-bottom: 40px; }
+    .toggle-btn { padding: 8px 24px; border: 1px solid var(--border); font-size: 0.875rem;
+      font-weight: 600; cursor: pointer; background: var(--card); color: var(--muted);
+      transition: all 0.2s; font-family: inherit; }
+    .toggle-btn:first-child { border-radius: 8px 0 0 8px; }
+    .toggle-btn:last-child { border-radius: 0 8px 8px 0; }
+    .toggle-btn.active { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; border-color: transparent; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 32px; cursor: pointer; transition: all 0.2s; }
+    .card:hover { border-color: var(--primary); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+    .card.popular { border-color: var(--primary); background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(139,92,246,0.05));
+      transform: scale(1.03); box-shadow: 0 0 40px rgba(99,102,241,0.2); }
+    .badge { display: inline-block; padding: 3px 12px; border-radius: 999px; font-size: 0.72rem;
+      font-weight: 700; color: #fff; margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+    .plan { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .price { font-size: 2.8rem; font-weight: 800; margin: 12px 0; }
+    .price span { font-size: 1rem; font-weight: 400; color: var(--muted); }
+    .desc { color: var(--muted); font-size: 0.875rem; margin-bottom: 20px; }
+    ul { list-style: none; margin-bottom: 28px; }
+    ul li { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.875rem;
+      color: var(--muted); display: flex; align-items: center; gap: 8px; }
+    ul li::before { content: '✓'; color: #4ade80; font-weight: 700; }
+    ul li.no::before { content: '✕'; color: #ef4444; }
+    ul li.no { opacity: 0.5; }
+    .btn { width: 100%; padding: 12px; border-radius: 10px; font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; border: none; font-family: inherit; transition: all 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff;
+      box-shadow: 0 0 20px rgba(99,102,241,0.35); }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { border-color: var(--primary); background: rgba(99,102,241,0.07); }
+    .faq { margin-top: 80px; }
+    .faq h2 { font-size: 1.8rem; font-weight: 800; text-align: center; margin-bottom: 32px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 20px 24px; margin-bottom: 12px; cursor: pointer; transition: border-color 0.2s; }
+    .faq-item:hover { border-color: var(--primary); }
+    .faq-item h3 { font-size: 0.95rem; font-weight: 600; }
+    .faq-item p { font-size: 0.875rem; color: var(--muted); margin-top: 10px; display: none; line-height: 1.7; }
+    .faq-item.open p { display: block; }
+    .tracker-banner { position: fixed; bottom: 20px; right: 20px;
+      background: var(--card); border: 1px solid rgba(99,102,241,0.4); border-radius: 12px;
+      padding: 10px 14px; font-size: 0.78rem; color: var(--muted);
+      display: flex; align-items: center; gap: 8px; z-index: 999; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80;
+      box-shadow: 0 0 8px #4ade80; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(0.85)} }
+    footer { padding: 30px 5%; border-top: 1px solid var(--border); text-align: center;
+      color: var(--muted); font-size: 0.85rem; margin-top: 60px; }
+    .page-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 20px; flex-wrap: wrap; }
+    .page-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .page-links a:hover { color: var(--text); }
+    @media(max-width:768px){ .grid{grid-template-columns:1fr;} .card.popular{transform:none;} }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">TechCorp</div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="pricing.html" class="active">Pricing</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<section>
+  <h1>Simple, Transparent Pricing</h1>
+  <p class="subtitle">Start free. Scale as you grow. No surprise charges, ever.</p>
+
+  <div class="toggle-wrap">
+    <button class="toggle-btn active" id="monthly-btn" onclick="setMonthly()">Monthly</button>
+    <button class="toggle-btn" id="annual-btn" onclick="setAnnual()">Annual (Save 20%)</button>
+  </div>
+
+  <div class="grid">
+    <div class="card" id="card-free">
+      <div class="plan">Free</div>
+      <div class="price" id="price-free">$0 <span>/mo</span></div>
+      <p class="desc">For indie makers and side projects.</p>
+      <ul>
+        <li>5,000 events/month</li>
+        <li>1 project</li>
+        <li>7-day retention</li>
+        <li>Basic heatmaps</li>
+        <li class="no">Session recording</li>
+        <li class="no">Custom dashboards</li>
+      </ul>
+      <button class="btn btn-outline" id="btn-free">Get Started Free</button>
+    </div>
+
+    <div class="card popular" id="card-pro">
+      <span class="badge">⭐ Most Popular</span>
+      <div class="plan">Pro</div>
+      <div class="price" id="price-pro">$49 <span>/mo</span></div>
+      <p class="desc">For growing teams that need more power.</p>
+      <ul>
+        <li>500K events/month</li>
+        <li>10 projects</li>
+        <li>90-day retention</li>
+        <li>Advanced heatmaps</li>
+        <li>Session recording</li>
+        <li class="no">Custom dashboards</li>
+      </ul>
+      <button class="btn btn-primary" id="btn-pro">Start Pro Trial</button>
+    </div>
+
+    <div class="card" id="card-enterprise">
+      <div class="plan">Enterprise</div>
+      <div class="price" id="price-enterprise">$199 <span>/mo</span></div>
+      <p class="desc">Unlimited scale, white-glove support.</p>
+      <ul>
+        <li>Unlimited events</li>
+        <li>Unlimited projects</li>
+        <li>1-year retention</li>
+        <li>Advanced heatmaps</li>
+        <li>Session recording</li>
+        <li>Custom dashboards</li>
+      </ul>
+      <button class="btn btn-outline" id="btn-enterprise">Contact Sales</button>
+    </div>
+  </div>
+
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item" id="faq-1" onclick="toggleFaq(this)">
+      <h3>Can I change my plan later?</h3>
+      <p>Yes! You can upgrade or downgrade your plan at any time from your account settings. Changes take effect immediately.</p>
+    </div>
+    <div class="faq-item" id="faq-2" onclick="toggleFaq(this)">
+      <h3>What counts as an "event"?</h3>
+      <p>Every page view and click tracked by the tracker.js script counts as one event. Dashboard views and API calls do not count.</p>
+    </div>
+    <div class="faq-item" id="faq-3" onclick="toggleFaq(this)">
+      <h3>Is there a free trial?</h3>
+      <p>Yes! Every paid plan comes with a 14-day free trial. No credit card required to start.</p>
+    </div>
+    <div class="faq-item" id="faq-4" onclick="toggleFaq(this)">
+      <h3>Do you offer refunds?</h3>
+      <p>We offer a 30-day money-back guarantee. If you're not satisfied, contact support for a full refund.</p>
+    </div>
+  </div>
+</section>
+
+<div class="page-links">
+  <a href="index.html" id="link-home">← Back to Home</a>
+  <a href="about.html" id="link-about">About Us</a>
+  <a href="contact.html" id="link-contact">Contact</a>
+</div>
+
+<footer>
+  <p>© 2025 TechCorp Inc. — Pricing page tracked by WebAnalytics</p>
+</footer>
+
+<div class="tracker-banner">
+  <div class="dot"></div>
+  <span>Tracking: <strong style="color:#818cf8;" id="sid">...</strong></span>
+</div>
+
+<script src="../tracker.js" data-backend-url="http://localhost:5000"></script>
+<script>
+  function setMonthly() {
+    document.getElementById('monthly-btn').classList.add('active');
+    document.getElementById('annual-btn').classList.remove('active');
+    document.getElementById('price-free').innerHTML = '$0 <span>/mo</span>';
+    document.getElementById('price-pro').innerHTML = '$49 <span>/mo</span>';
+    document.getElementById('price-enterprise').innerHTML = '$199 <span>/mo</span>';
+  }
+  function setAnnual() {
+    document.getElementById('annual-btn').classList.add('active');
+    document.getElementById('monthly-btn').classList.remove('active');
+    document.getElementById('price-free').innerHTML = '$0 <span>/mo</span>';
+    document.getElementById('price-pro').innerHTML = '$39 <span>/mo</span>';
+    document.getElementById('price-enterprise').innerHTML = '$159 <span>/mo</span>';
+  }
+  function toggleFaq(el) { el.classList.toggle('open'); }
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      const el = document.getElementById('sid');
+      if (window.WebTracker && el) el.textContent = window.WebTracker.getSessionId().slice(0,8) + '…';
+    }, 200);
+  });
+</script>
+</body>
+</html>

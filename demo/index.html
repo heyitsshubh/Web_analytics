@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechCorp — Demo Page (Tracker Test)</title>
+  <meta name="description" content="A demo page to test the WebAnalytics tracker.js script." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #8b5cf6;
+      --accent: #06b6d4;
+      --bg: #0f0f17;
+      --surface: #1a1a27;
+      --card: #1e1e2e;
+      --border: #2d2d45;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --radius: 16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    img { max-width: 100%; border-radius: var(--radius); display: block; }
+
+    /* ─── Navbar ───────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 68px;
+      background: rgba(15,15,23,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.25rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links { display: flex; gap: 2rem; }
+
+    .nav-links a {
+      font-size: 0.875rem; font-weight: 500;
+      color: var(--muted); transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff !important; font-weight: 600;
+      padding: 0.5rem 1.25rem; border-radius: 10px;
+      transition: opacity 0.2s, transform 0.15s;
+      -webkit-text-fill-color: #fff !important;
+    }
+
+    .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); text-decoration: none; }
+
+    /* ─── Sections ─────────────────────────────────────────── */
+    section { padding: 80px 5%; }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    /* ─── Hero ──────────────────────────────────────────────── */
+    .hero {
+      text-align: center; padding: 100px 5% 80px;
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(99,102,241,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 70% 80%, rgba(139,92,246,0.12) 0%, transparent 55%);
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 999px;
+      background: rgba(99,102,241,0.15);
+      border: 1px solid rgba(99,102,241,0.3);
+      font-size: 0.78rem; font-weight: 600; color: #818cf8;
+      margin-bottom: 24px;
+    }
+
+    .hero-badge::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: #4ade80; box-shadow: 0 0 8px #4ade80;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.85); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800; line-height: 1.15; margin-bottom: 20px;
+      background: linear-gradient(135deg, #e2e8f0 30%, #818cf8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.125rem; color: var(--muted); max-width: 560px;
+      margin: 0 auto 36px;
+    }
+
+    .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 0.75rem 1.75rem; border-radius: 12px;
+      font-size: 0.95rem; font-weight: 600; cursor: pointer;
+      border: none; transition: all 0.2s; font-family: inherit;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      box-shadow: 0 0 24px rgba(99,102,241,0.4);
+    }
+
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 32px rgba(99,102,241,0.5); }
+
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover { border-color: #6366f1; background: rgba(99,102,241,0.07); }
+
+    /* ─── Stats Bar ─────────────────────────────────────────── */
+    .stats-bar {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; margin-top: 60px;
+    }
+
+    .stat-item {
+      background: var(--card); padding: 28px; text-align: center;
+    }
+
+    .stat-item .value {
+      font-size: 2rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .stat-item .label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; font-weight: 500; }
+
+    /* ─── Features Grid ─────────────────────────────────────── */
+    .section-title {
+      font-size: 2rem; font-weight: 800; text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      text-align: center; color: var(--muted); font-size: 1rem;
+      margin-bottom: 48px;
+    }
+
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+
+    .feature-card:hover {
+      border-color: var(--primary); transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(99,102,241,0.2);
+    }
+
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 16px;
+    }
+
+    .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+
+    .feature-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ─── Image Gallery ─────────────────────────────────────── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .gallery-item {
+      border-radius: var(--radius); overflow: hidden;
+      border: 1px solid var(--border); cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      aspect-ratio: 16/10;
+      background: var(--card);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem;
+      position: relative;
+    }
+
+    .gallery-item:hover { transform: scale(1.02); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+
+    .gallery-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 8px 12px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      font-size: 0.75rem; font-weight: 600; color: var(--muted);
+    }
+
+    /* ─── Pricing ───────────────────────────────────────────── */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px; align-items: start;
+    }
+
+    .pricing-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 32px;
+      transition: all 0.2s; cursor: pointer;
+    }
+
+    .pricing-card.popular {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.05));
+      box-shadow: 0 0 40px rgba(99,102,241,0.2);
+      transform: scale(1.03);
+    }
+
+    .popular-badge {
+      display: inline-block; padding: 3px 12px; border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      font-size: 0.72rem; font-weight: 700; color: #fff;
+      margin-bottom: 16px;
+    }
+
+    .plan-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+
+    .plan-price {
+      font-size: 2.5rem; font-weight: 800; color: var(--text);
+      margin: 12px 0;
+    }
+
+    .plan-price span { font-size: 1rem; font-weight: 400; color: var(--muted); }
+
+    .plan-features { list-style: none; margin: 20px 0 28px; space-y: 8px; }
+
+    .plan-features li {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.9rem; color: var(--muted); padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .plan-features li::before { content: '✓'; color: #4ade80; font-weight: 700; }
+
+    .plan-features li.disabled::before { content: '✕'; color: #ef4444; }
+    .plan-features li.disabled { opacity: 0.5; }
+
+    /* ─── CTA Section ───────────────────────────────────────── */
+    .cta-section {
+      text-align: center;
+      background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.08));
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cta-section h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 16px; }
+    .cta-section p { color: var(--muted); font-size: 1.1rem; margin-bottom: 36px; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+    /* ─── Footer ───────────────────────────────────────────── */
+    footer {
+      padding: 40px 5%; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+
+    footer p { color: var(--muted); font-size: 0.85rem; }
+
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { color: var(--muted); font-size: 0.85rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); text-decoration: none; }
+
+    /* ─── Tracker Banner ────────────────────────────────────── */
+    .tracker-banner {
+      position: fixed; bottom: 20px; right: 20px;
+      background: var(--card); border: 1px solid rgba(99,102,241,0.4);
+      border-radius: 12px; padding: 12px 16px;
+      font-size: 0.78rem; color: var(--muted);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      z-index: 999; display: flex; align-items: center; gap: 8px;
+    }
+
+    .tracker-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 8px #4ade80;
+      animation: pulse 2s infinite;
+    }
+
+    @media (max-width: 768px) {
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .pricing-card.popular { transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════════════ -->
+  <nav>
+    <div class="nav-logo">TechCorp</div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+      <a href="#" class="nav-cta">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════
+       HERO SECTION
+  ═══════════════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">Tracker Active — Every click is being recorded</div>
+      <h1>Build Products<br />That Users Love</h1>
+      <p>
+        The modern platform for shipping faster, collaborating better,
+        and understanding your users deeply through real-time analytics.
+      </p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" id="hero-cta-primary">
+          🚀 Start Free Trial
+        </button>
+        <button class="btn btn-outline" id="hero-cta-secondary">
+          ▶ Watch Demo
+        </button>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="value">50K+</div>
+          <div class="label">Active Users</div>
+        </div>
+        <div class="stat-item">
+          <div class="value">99.9%</div>
+          <div class="label">Uptime SLA</div>
+        </div>
+        <div class="stat-item">
+          <div class="value">4.9★</div>
+          <div class="label">User Rating</div>
+        </div>
+        <div class="stat-item">
+          <div class="value">180+</div>
+          <div class="label">Countries</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       FEATURES SECTION
+  ═══════════════════════════════════════════════════ -->
+  <section id="features">
+    <div class="container">
+      <h2 class="section-title">Everything You Need</h2>
+      <p class="section-subtitle">Powerful features designed to help your team ship faster and smarter.</p>
+
+      <div class="features-grid">
+        <div class="feature-card" id="feature-analytics">
+          <div class="feature-icon" style="background: rgba(99,102,241,0.15);">📊</div>
+          <h3>Real-time Analytics</h3>
+          <p>Get instant insights into your users' behavior with live dashboards and customizable reports.</p>
+        </div>
+        <div class="feature-card" id="feature-heatmaps">
+          <div class="feature-icon" style="background: rgba(239,68,68,0.15);">🔥</div>
+          <h3>Click Heatmaps</h3>
+          <p>Visualize exactly where users click, scroll, and interact on every page of your application.</p>
+        </div>
+        <div class="feature-card" id="feature-sessions">
+          <div class="feature-icon" style="background: rgba(16,185,129,0.15);">🎯</div>
+          <h3>Session Recording</h3>
+          <p>Replay individual user sessions to understand exactly how users navigate your product.</p>
+        </div>
+        <div class="feature-card" id="feature-funnels">
+          <div class="feature-icon" style="background: rgba(245,158,11,0.15);">⚡</div>
+          <h3>Conversion Funnels</h3>
+          <p>Identify drop-off points in your conversion funnel and optimize each step for better results.</p>
+        </div>
+        <div class="feature-card" id="feature-alerts">
+          <div class="feature-icon" style="background: rgba(6,182,212,0.15);">🔔</div>
+          <h3>Smart Alerts</h3>
+          <p>Get notified instantly when key metrics change or anomalies are detected in your data.</p>
+        </div>
+        <div class="feature-card" id="feature-integrations">
+          <div class="feature-icon" style="background: rgba(139,92,246,0.15);">🔗</div>
+          <h3>100+ Integrations</h3>
+          <p>Connect with Slack, Jira, Salesforce, and all your favorite tools with one-click setup.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       IMAGE GALLERY SECTION
+  ═══════════════════════════════════════════════════ -->
+  <section id="gallery" style="background: rgba(26,26,39,0.5);">
+    <div class="container">
+      <h2 class="section-title">See It In Action</h2>
+      <p class="section-subtitle">Click on any screenshot to explore our product in detail.</p>
+
+      <div class="gallery-grid">
+        <div class="gallery-item" id="gallery-dashboard" style="font-size:3rem;">
+          📈
+          <div class="gallery-label">Analytics Dashboard</div>
+        </div>
+        <div class="gallery-item" id="gallery-heatmap" style="font-size:3rem;">
+          🗺️
+          <div class="gallery-label">Heatmap View</div>
+        </div>
+        <div class="gallery-item" id="gallery-journey" style="font-size:3rem;">
+          🛤️
+          <div class="gallery-label">User Journey</div>
+        </div>
+        <div class="gallery-item" id="gallery-reports" style="font-size:3rem;">
+          📋
+          <div class="gallery-label">Custom Reports</div>
+        </div>
+        <div class="gallery-item" id="gallery-mobile" style="font-size:3rem;">
+          📱
+          <div class="gallery-label">Mobile Analytics</div>
+        </div>
+        <div class="gallery-item" id="gallery-api" style="font-size:3rem;">
+          🔌
+          <div class="gallery-label">API & Integrations</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       PRICING SECTION
+  ═══════════════════════════════════════════════════ -->
+  <section id="pricing">
+    <div class="container">
+      <h2 class="section-title">Simple Pricing</h2>
+      <p class="section-subtitle">Choose the plan that works best for your team. No hidden fees.</p>
+
+      <div class="pricing-grid">
+        <!-- Starter -->
+        <div class="pricing-card" id="pricing-starter">
+          <div class="plan-name">Starter</div>
+          <div class="plan-price">$0 <span>/ month</span></div>
+          <p style="color:var(--muted); font-size:0.9rem; margin-bottom:16px;">Perfect for indie projects and hobbyists.</p>
+          <ul class="plan-features">
+            <li>5,000 events / month</li>
+            <li>1 project</li>
+            <li>7-day data retention</li>
+            <li>Basic heatmaps</li>
+            <li class="disabled">Session recording</li>
+            <li class="disabled">Priority support</li>
+          </ul>
+          <button class="btn btn-outline" style="width:100%;" id="pricing-starter-btn">Get Started Free</button>
+        </div>
+
+        <!-- Pro (Popular) -->
+        <div class="pricing-card popular" id="pricing-pro">
+          <span class="popular-badge">⭐ Most Popular</span>
+          <div class="plan-name">Pro</div>
+          <div class="plan-price">$49 <span>/ month</span></div>
+          <p style="color:var(--muted); font-size:0.9rem; margin-bottom:16px;">For growing teams that need more power.</p>
+          <ul class="plan-features">
+            <li>500,000 events / month</li>
+            <li>10 projects</li>
+            <li>90-day data retention</li>
+            <li>Advanced heatmaps</li>
+            <li>Session recording</li>
+            <li class="disabled">Priority support</li>
+          </ul>
+          <button class="btn btn-primary" style="width:100%;" id="pricing-pro-btn">Start Pro Trial</button>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="pricing-card" id="pricing-enterprise">
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-price">$199 <span>/ month</span></div>
+          <p style="color:var(--muted); font-size:0.9rem; margin-bottom:16px;">Unlimited scale with white-glove support.</p>
+          <ul class="plan-features">
+            <li>Unlimited events</li>
+            <li>Unlimited projects</li>
+            <li>1-year data retention</li>
+            <li>Advanced heatmaps</li>
+            <li>Session recording</li>
+            <li>Priority support</li>
+          </ul>
+          <button class="btn btn-outline" style="width:100%;" id="pricing-enterprise-btn">Contact Sales</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       CTA SECTION
+  ═══════════════════════════════════════════════════ -->
+  <section class="cta-section" id="contact">
+    <div class="container">
+      <h2>Ready to Get Started?</h2>
+      <p>Join 50,000+ teams who use TechCorp to understand their users and ship better products.</p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" id="cta-trial-btn">
+          🚀 Start Your Free Trial
+        </button>
+        <button class="btn btn-outline" id="cta-demo-btn">
+          📅 Book a Demo
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════════ -->
+  <footer>
+    <p>© 2025 TechCorp Inc. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#" id="footer-privacy">Privacy</a>
+      <a href="#" id="footer-terms">Terms</a>
+      <a href="#" id="footer-docs">Docs</a>
+      <a href="#" id="footer-blog">Blog</a>
+      <a href="#" id="footer-github">GitHub</a>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════════════
+       TRACKER STATUS BADGE
+  ═══════════════════════════════════════════════════ -->
+  <div class="tracker-banner">
+    <div class="tracker-dot"></div>
+    <span>WebTracker Active — <strong id="tracker-session-id" style="color:#818cf8;">Loading...</strong></span>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       EMBED TRACKER SCRIPT
+       Change data-backend-url to point to your backend.
+  ═══════════════════════════════════════════════════ -->
+  <script src="../tracker.js" data-backend-url="http://localhost:5000"></script>
+
+  <!-- Display session ID in the banner -->
+  <script>
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        const sessionEl = document.getElementById('tracker-session-id');
+        if (window.WebTracker && sessionEl) {
+          const id = window.WebTracker.getSessionId();
+          sessionEl.textContent = id.slice(0, 8) + '…';
+          sessionEl.title = id;
+        }
+      }, 200);
+    });
+  </script>
+
+</body>
+</html>
