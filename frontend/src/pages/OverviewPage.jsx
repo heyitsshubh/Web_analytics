@@ -78,7 +78,7 @@ function GettingStartedGuide({ onDismiss }) {
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
-            <span className="text-lg">🚀</span>
+            <span className="text-lg"></span>
           </div>
           <div>
             <h3 className="text-base font-bold text-slate-100">Quick Start Guide</h3>
@@ -171,7 +171,7 @@ function GettingStartedGuide({ onDismiss }) {
         ))}
       </div>
       <div className="mt-4 p-3 bg-brand/10 border border-brand/20 rounded-xl flex items-center gap-3">
-        <span className="text-lg flex-shrink-0">💡</span>
+        <span className="text-lg flex-shrink-0"></span>
         <p className="text-xs text-slate-300 leading-relaxed">
           <strong className="text-brand-light">Tip:</strong> Open demo pages in multiple browser tabs and click around each one.
           Then check the <strong className="text-slate-200">Heatmap</strong> page — select any URL from the dropdown to see exactly where users clicked.

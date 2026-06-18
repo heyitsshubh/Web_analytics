@@ -79,17 +79,6 @@ export default function Sidebar() {
           );
         })}
       </nav>
-      <div className="px-4 py-4 border-t border-card-border">
-        <div className="glass-card p-3">
-          <p className="text-[11px] text-slate-500 font-medium">API Endpoint</p>
-          <p className="text-[11px] font-mono text-brand-light mt-1 truncate">
-            localhost:5000/api
-          </p>
-        </div>
-        <p className="text-[10px] text-slate-600 text-center mt-3">
-          WebAnalytics v1.0.0
-        </p>
-      </div>
     </aside>
   );
 }
