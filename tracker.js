@@ -1,22 +1,6 @@
-/**
- * WebTracker — Lightweight Analytics Tracking Script
- * =====================================================
- * Drop this script into any webpage to track:
- *  - Page views (auto-triggered on load)
- *  - Click events (global listener with x/y coordinates)
- *
- * Usage:
- *   <script src="tracker.js" data-backend-url="http://localhost:5000"></script>
- *
- * Or set the backend URL via global config before loading:
- *   <script>window.__TRACKER_CONFIG__ = { backendUrl: 'http://localhost:5000' };</script>
- */
 
 (function () {
   'use strict';
-
-  /* ─────────────────────────── Configuration ─────────────────────────── */
-
   const scriptTag = document.currentScript;
   const BACKEND_URL =
     (scriptTag && scriptTag.getAttribute('data-backend-url')) ||

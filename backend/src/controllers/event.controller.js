@@ -1,30 +1,7 @@
-/**
- * Event Controller
- * =================
- * Handles all analytics event operations.
- * Follows the MVC pattern — business logic lives here, not in routes.
- *
- * Endpoints handled:
- *  POST   /api/events                        → createEvent
- *  GET    /api/sessions                       → getSessions
- *  GET    /api/sessions/:sessionId/events     → getSessionEvents
- *  GET    /api/heatmap?pageUrl=...            → getHeatmapData
- *  GET    /api/heatmap/pages                  → getHeatmapPages
- *  GET    /api/stats                          → getStats
- */
 
 const Event = require('../models/Event');
-
-/* ─────────────────────────────────────────────────────────────────────── */
-/*  HELPER: Standard error response                                         */
-/* ─────────────────────────────────────────────────────────────────────── */
-
 const sendError = (res, statusCode, message) =>
   res.status(statusCode).json({ success: false, message });
-
-/* ─────────────────────────────────────────────────────────────────────── */
-/*  POST /api/events — Store a new tracking event                           */
-/* ─────────────────────────────────────────────────────────────────────── */
 
 /**
  * @desc    Create and persist a new analytics event
@@ -34,8 +11,6 @@ const sendError = (res, statusCode, message) =>
 const createEvent = async (req, res) => {
   try {
     const { session_id, event_type, page_url, timestamp, metadata } = req.body;
-
-    // ── Validation ────────────────────────────────────────────────────
     if (!session_id || typeof session_id !== 'string') {
       return sendError(res, 400, 'session_id is required and must be a string');
     }
@@ -45,8 +20,6 @@ const createEvent = async (req, res) => {
     if (!page_url || typeof page_url !== 'string') {
       return sendError(res, 400, 'page_url is required and must be a string');
     }
-
-    // ── Create document ───────────────────────────────────────────────
     const event = await Event.create({
       session_id: session_id.trim(),
       event_type,
@@ -63,7 +36,6 @@ const createEvent = async (req, res) => {
       data: event,
     });
   } catch (error) {
-    // Mongoose validation errors
     if (error.name === 'ValidationError') {
       const messages = Object.values(error.errors).map((e) => e.message);
       return sendError(res, 400, messages.join(', '));
@@ -72,11 +44,6 @@ const createEvent = async (req, res) => {
     return sendError(res, 500, 'Internal server error');
   }
 };
-
-/* ─────────────────────────────────────────────────────────────────────── */
-/*  GET /api/sessions — Aggregated list of all sessions                     */
-/* ─────────────────────────────────────────────────────────────────────── */
-
 /**
  * @desc    Get all sessions with aggregated metrics
  * @route   GET /api/sessions
@@ -95,19 +62,15 @@ const getSessions = async (req, res) => {
           total_events: { $sum: 1 },
           first_seen: { $min: '$timestamp' },
           last_seen: { $max: '$timestamp' },
-          // Count page views conditionally
           page_views: {
             $sum: { $cond: [{ $eq: ['$event_type', 'page_view'] }, 1, 0] },
           },
-          // Count click events conditionally
           clicks: {
             $sum: { $cond: [{ $eq: ['$event_type', 'click'] }, 1, 0] },
           },
-          // Collect unique page URLs visited
           pages_visited: { $addToSet: '$page_url' },
         },
       },
-      // ── Stage 2: Shape the output document ────────────────────────
       {
         $project: {
           _id: 0,
@@ -120,7 +83,6 @@ const getSessions = async (req, res) => {
           unique_pages: { $size: '$pages_visited' },
         },
       },
-      // ── Stage 3: Sort by most recent activity first ────────────────
       { $sort: { last_seen: -1 } },
     ]);
 
@@ -135,14 +97,10 @@ const getSessions = async (req, res) => {
   }
 };
 
-/* ─────────────────────────────────────────────────────────────────────── */
-/*  GET /api/sessions/:sessionId/events — Full user journey for a session   */
-/* ─────────────────────────────────────────────────────────────────────── */
-
 /**
- * @desc    Get all events for a specific session, ordered chronologically
- * @route   GET /api/sessions/:sessionId/events
- * @access  Public
+ * @desc   
+ * @route   
+ * @access  
  */
 const getSessionEvents = async (req, res) => {
   try {
@@ -153,9 +111,9 @@ const getSessionEvents = async (req, res) => {
     }
 
     const events = await Event.find({ session_id: sessionId })
-      .sort({ timestamp: 1 }) // Chronological order for journey replay
-      .select('-__v')          // Exclude version key from response
-      .lean();                 // Plain JS objects (faster than Mongoose docs)
+      .sort({ timestamp: 1 })
+      .select('-__v')         
+      .lean();                 
 
     if (!events.length) {
       return res.status(404).json({
@@ -176,10 +134,6 @@ const getSessionEvents = async (req, res) => {
   }
 };
 
-/* ─────────────────────────────────────────────────────────────────────── */
-/*  GET /api/heatmap?pageUrl=... — Click heatmap data for a specific URL    */
-/* ─────────────────────────────────────────────────────────────────────── */
-
 /**
  * @desc    Get all click events for a specific page URL (for heatmap rendering)
  * @route   GET /api/heatmap?pageUrl=https://example.com
@@ -199,8 +153,6 @@ const getHeatmapData = async (req, res) => {
     })
       .select('metadata.x metadata.y timestamp -_id')
       .lean();
-
-    // Shape: only return what the heatmap renderer needs
     const heatmapData = clicks
       .filter((c) => c.metadata?.x !== null && c.metadata?.y !== null)
       .map((click) => ({
@@ -220,11 +172,6 @@ const getHeatmapData = async (req, res) => {
     return sendError(res, 500, 'Internal server error');
   }
 };
-
-/* ─────────────────────────────────────────────────────────────────────── */
-/*  GET /api/heatmap/pages — List all pages that have click data            */
-/* ─────────────────────────────────────────────────────────────────────── */
-
 /**
  * @desc    Get all unique page URLs that have recorded click events
  * @route   GET /api/heatmap/pages
@@ -244,11 +191,6 @@ const getHeatmapPages = async (req, res) => {
     return sendError(res, 500, 'Internal server error');
   }
 };
-
-/* ─────────────────────────────────────────────────────────────────────── */
-/*  GET /api/stats — High-level dashboard statistics                        */
-/* ─────────────────────────────────────────────────────────────────────── */
-
 /**
  * @desc    Aggregate overall platform statistics for the dashboard overview
  * @route   GET /api/stats
@@ -256,21 +198,13 @@ const getHeatmapPages = async (req, res) => {
  */
 const getStats = async (req, res) => {
   try {
-    // Run all aggregations in parallel for performance
     const [totalEvents, uniqueSessions, eventsByType, topPages, recentEvents] =
       await Promise.all([
-        // Total event count
         Event.countDocuments(),
-
-        // Unique session count
         Event.distinct('session_id').then((ids) => ids.length),
-
-        // Breakdown by event type
         Event.aggregate([
           { $group: { _id: '$event_type', count: { $sum: 1 } } },
         ]),
-
-        // Top 5 most visited pages (by page_view count)
         Event.aggregate([
           { $match: { event_type: 'page_view' } },
           { $group: { _id: '$page_url', views: { $sum: 1 } } },
@@ -278,14 +212,10 @@ const getStats = async (req, res) => {
           { $limit: 5 },
           { $project: { _id: 0, page_url: '$_id', views: 1 } },
         ]),
-
-        // Events in the last 24 hours
         Event.countDocuments({
           createdAt: { $gte: new Date(Date.now() - 24 * 60 * 60 * 1000) },
         }),
       ]);
-
-    // Convert event type array to an easy-to-consume map
     const eventTypeMap = eventsByType.reduce((acc, item) => {
       acc[item._id] = item.count;
       return acc;
@@ -307,9 +237,6 @@ const getStats = async (req, res) => {
     return sendError(res, 500, 'Internal server error');
   }
 };
-
-/* ──────────────────────── Exports ──────────────────────────────────── */
-
 module.exports = {
   createEvent,
   getSessions,
