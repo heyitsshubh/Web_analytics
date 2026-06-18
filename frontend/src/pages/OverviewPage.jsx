@@ -50,30 +50,20 @@ const Icons = {
 const STEPS = [
   {
     number: '01',
-    icon: '🖥️',
-    color: 'from-indigo-500 to-violet-500',
-    glow: 'rgba(99,102,241,0.25)',
-    title: 'Start the Demo Server',
-    description: 'Open a terminal in the project root and run this command to serve the demo pages over HTTP:',
-    code: 'npx serve . -p 3000',
-    note: 'Must be served via HTTP — not opened as a file:// URL',
-  },
-  {
-    number: '02',
     icon: '🌐',
     color: 'from-cyan-500 to-blue-500',
     glow: 'rgba(6,182,212,0.25)',
     title: 'Open a Demo Page & Click Around',
     description: 'Open any demo page below in your browser. Every page load records a Page View. Every click records coordinates.',
     links: [
-      { label: 'Home Page', url: 'http://localhost:3000/demo/index.html' },
-      { label: 'Pricing Page', url: 'http://localhost:3000/demo/pricing.html' },
-      { label: 'About Page', url: 'http://localhost:3000/demo/about.html' },
+      { label: 'Home Page', url: '/demo/index.html' },
+      { label: 'Pricing Page', url: '/demo/pricing.html' },
+      { label: 'About Page', url: '/demo/about.html' },
     ],
     note: 'Click buttons, cards, links — each click sends an event to the backend',
   },
   {
-    number: '03',
+    number: '02',
     icon: '📊',
     color: 'from-emerald-500 to-teal-500',
     glow: 'rgba(16,185,129,0.25)',
@@ -158,7 +148,7 @@ function GettingStartedGuide({ onDismiss }) {
                     </svg>
                     <span className="truncate group-hover/link:underline">{link.label}</span>
                     <code className="text-slate-500 text-[10px] font-mono truncate hidden sm:block">
-                      {link.url.replace('http://localhost:3000', '')}
+                      {link.url}
                     </code>
                   </a>
                 ))}
@@ -404,9 +394,9 @@ export default function OverviewPage() {
               <p className="text-sm text-slate-500">No sessions yet</p>
               <p className="text-xs text-slate-600 mt-1">
                 Open a demo page at{' '}
-                <a href="http://localhost:3000/demo/index.html" target="_blank" rel="noopener noreferrer"
+                <a href="/demo/index.html" target="_blank" rel="noopener noreferrer"
                   className="text-brand-light hover:underline font-mono text-[10px]">
-                  localhost:3000/demo
+                  /demo/index.html
                 </a>
                 {' '}to start tracking
               </p>

@@ -16,7 +16,7 @@ export default function LandingPage() {
           <h1 className="text-xl font-bold text-slate-100">WebAnalytics</h1>
         </div>
         <div className="flex gap-4">
-          <a href="http://localhost:3000/demo/index.html" target="_blank" rel="noreferrer" className="btn-outline px-4 py-2 text-sm">
+          <a href="/demo/index.html" target="_blank" rel="noreferrer" className="btn-outline px-4 py-2 text-sm">
             View Demo Pages
           </a>
           <button onClick={() => navigate('/dashboard')} className="btn-primary px-4 py-2 text-sm">
@@ -58,29 +58,18 @@ export default function LandingPage() {
 
           <div className="space-y-6">
             <div className="flex gap-4">
-              <div className="w-10 h-10 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold flex-shrink-0 border border-indigo-500/30">1</div>
-              <div>
-                <h4 className="font-bold text-slate-200 mb-1">Start the Demo Server</h4>
-                <p className="text-sm text-slate-400 mb-2">Open a terminal in the project root and run this command to serve the demo site over HTTP:</p>
-                <div className="bg-surface rounded border border-card-border px-3 py-2 text-xs font-mono text-emerald-400">
-                  npx serve . -p 3000
-                </div>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="w-10 h-10 rounded-full bg-violet-500/20 text-violet-400 flex items-center justify-center font-bold flex-shrink-0 border border-violet-500/30">2</div>
+              <div className="w-10 h-10 rounded-full bg-violet-500/20 text-violet-400 flex items-center justify-center font-bold flex-shrink-0 border border-violet-500/30">1</div>
               <div>
                 <h4 className="font-bold text-slate-200 mb-1">Go to the Demo Page & Click Around</h4>
                 <p className="text-sm text-slate-400 mb-3">You must visit the demo page first. The tracking script is embedded there. Click buttons and links to generate data.</p>
                 <div className="flex flex-wrap gap-3">
-                  <a href="http://localhost:3000/demo/index.html" target="_blank" rel="noreferrer" className="btn-outline px-4 py-2 text-xs flex items-center gap-2">
+                  <a href="/demo/index.html" target="_blank" rel="noreferrer" className="btn-outline px-4 py-2 text-xs flex items-center gap-2">
                     <span>🏠</span> Home Page
                   </a>
-                  <a href="http://localhost:3000/demo/pricing.html" target="_blank" rel="noreferrer" className="btn-outline px-4 py-2 text-xs flex items-center gap-2">
+                  <a href="/demo/pricing.html" target="_blank" rel="noreferrer" className="btn-outline px-4 py-2 text-xs flex items-center gap-2">
                     <span>💰</span> Pricing Page
                   </a>
-                  <a href="http://localhost:3000/demo/about.html" target="_blank" rel="noreferrer" className="btn-outline px-4 py-2 text-xs flex items-center gap-2">
+                  <a href="/demo/about.html" target="_blank" rel="noreferrer" className="btn-outline px-4 py-2 text-xs flex items-center gap-2">
                     <span>👥</span> About Page
                   </a>
                 </div>
@@ -88,7 +77,7 @@ export default function LandingPage() {
             </div>
 
             <div className="flex gap-4">
-              <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold flex-shrink-0 border border-emerald-500/30">3</div>
+              <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold flex-shrink-0 border border-emerald-500/30">2</div>
               <div>
                 <h4 className="font-bold text-slate-200 mb-1">View the Dashboard</h4>
                 <p className="text-sm text-slate-400 mb-3">After generating data on the demo pages, click below to enter the analytics dashboard and view the results.</p>

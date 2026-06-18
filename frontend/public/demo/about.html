@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — TechCorp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #6366f1; --secondary: #8b5cf6;
+      --bg: #0f0f17; --card: #1e1e2e; --border: #2d2d45;
+      --text: #e2e8f0; --muted: #94a3b8; --radius: 16px;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 64px;
+      background: rgba(15,15,23,0.9); border-bottom: 1px solid var(--border);
+    }
+    .logo { font-size: 1.2rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-links { display: flex; gap: 1.5rem; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover,.nav-links a.active { color: var(--text); }
+    .hero { padding: 80px 5%; text-align: center;
+      background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.15) 0%, transparent 60%); }
+    h1 { font-size: 3rem; font-weight: 800; margin-bottom: 16px;
+      background: linear-gradient(135deg, #e2e8f0, #818cf8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { color: var(--muted); font-size: 1.1rem; max-width: 540px; margin: 0 auto 40px; }
+    section { padding: 60px 5%; max-width: 1100px; margin: 0 auto; }
+    .section-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 12px; }
+    .section-sub { color: var(--muted); margin-bottom: 36px; }
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+    .team-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 28px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .team-card:hover { border-color: var(--primary); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
+    .avatar { width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center; font-size: 2rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+    .name { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .role { font-size: 0.8rem; color: var(--muted); }
+    .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .value-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 24px; cursor: pointer; transition: all 0.2s; }
+    .value-card:hover { border-color: var(--primary); }
+    .value-icon { font-size: 2rem; margin-bottom: 12px; }
+    .value-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .value-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
+    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px;
+      background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 60px; }
+    .stat { background: var(--card); padding: 28px; text-align: center; }
+    .stat .n { font-size: 2.2rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat .l { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px;
+      border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+      border: none; font-family: inherit; transition: all 0.2s;
+      background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; }
+    .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+    .cta-box { text-align: center; padding: 60px 5%;
+      background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(139,92,246,0.06));
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-top: 40px; }
+    .cta-box h2 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
+    .cta-box p { color: var(--muted); margin-bottom: 28px; }
+    .tracker-banner { position: fixed; bottom: 20px; right: 20px;
+      background: var(--card); border: 1px solid rgba(99,102,241,0.4); border-radius: 12px;
+      padding: 10px 14px; font-size: 0.78rem; color: var(--muted);
+      display: flex; align-items: center; gap: 8px; z-index: 999; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80;
+      box-shadow: 0 0 8px #4ade80; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.6} }
+    footer { padding: 28px 5%; border-top: 1px solid var(--border);
+      text-align: center; color: var(--muted); font-size: 0.85rem; }
+    .page-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 16px; flex-wrap: wrap; }
+    .page-links a { color: var(--muted); text-decoration: none; font-size: 0.875rem; }
+    .page-links a:hover { color: var(--text); }
+    @media(max-width:600px){ .stats-row{grid-template-columns:repeat(2,1fr);} }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">TechCorp</div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html" class="active">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>We're Building the Future<br />of Analytics</h1>
+  <p>Founded in 2020, TechCorp helps 50,000+ teams understand their users and build better products.</p>
+  <button class="btn" id="hero-join-btn">Join Our Team</button>
+</div>
+
+<section>
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat"><div class="n">50K+</div><div class="l">Active Users</div></div>
+    <div class="stat"><div class="n">180+</div><div class="l">Countries</div></div>
+    <div class="stat"><div class="n">$24M</div><div class="l">Raised</div></div>
+    <div class="stat"><div class="n">4.9★</div><div class="l">G2 Rating</div></div>
+  </div>
+
+  <!-- Team -->
+  <div class="section-title">Meet the Team</div>
+  <p class="section-sub">The people behind the product.</p>
+  <div class="team-grid">
+    <div class="team-card" id="team-alice">
+      <div class="avatar">👩‍💻</div>
+      <div class="name">Alice Chen</div>
+      <div class="role">CEO & Co-founder</div>
+    </div>
+    <div class="team-card" id="team-bob">
+      <div class="avatar">👨‍🔬</div>
+      <div class="name">Bob Martinez</div>
+      <div class="role">CTO & Co-founder</div>
+    </div>
+    <div class="team-card" id="team-sara">
+      <div class="avatar">👩‍🎨</div>
+      <div class="name">Sara Kim</div>
+      <div class="role">Head of Design</div>
+    </div>
+    <div class="team-card" id="team-raj">
+      <div class="avatar">👨‍💼</div>
+      <div class="name">Raj Patel</div>
+      <div class="role">Head of Growth</div>
+    </div>
+  </div>
+
+  <!-- Values -->
+  <div class="section-title" style="margin-top:60px;">Our Values</div>
+  <p class="section-sub">What drives everything we do.</p>
+  <div class="values-grid">
+    <div class="value-card" id="value-transparency">
+      <div class="value-icon">🔍</div>
+      <h3>Transparency</h3>
+      <p>We believe in open, honest communication with our customers, team, and stakeholders.</p>
+    </div>
+    <div class="value-card" id="value-privacy">
+      <div class="value-icon">🔐</div>
+      <h3>Privacy First</h3>
+      <p>We collect only what's necessary and give users full control over their data.</p>
+    </div>
+    <div class="value-card" id="value-speed">
+      <div class="value-icon">⚡</div>
+      <h3>Speed</h3>
+      <p>We ship fast, iterate quickly, and never let perfect be the enemy of good.</p>
+    </div>
+    <div class="value-card" id="value-empathy">
+      <div class="value-icon">❤️</div>
+      <h3>Empathy</h3>
+      <p>We put ourselves in our users' shoes before making every product decision.</p>
+    </div>
+  </div>
+</section>
+
+<div class="cta-box">
+  <h2>Want to Join Us?</h2>
+  <p>We're always looking for talented people who share our values.</p>
+  <button class="btn" id="cta-careers-btn">View Open Roles</button>
+</div>
+
+<div class="page-links" style="margin-top:30px;">
+  <a href="index.html" id="link-home">Home</a>
+  <a href="pricing.html" id="link-pricing">Pricing</a>
+  <a href="contact.html" id="link-contact">Contact</a>
+</div>
+
+<footer>
+  <p>© 2025 TechCorp Inc. — About page tracked by WebAnalytics</p>
+</footer>
+
+<div class="tracker-banner">
+  <div class="dot"></div>
+  <span>Tracking: <strong style="color:#818cf8;" id="sid">...</strong></span>
+</div>
+
+<script src="../tracker.js" data-backend-url="https://web-analytics-api-xyz.onrender.com"></script>
+<script>
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      const el = document.getElementById('sid');
+      if (window.WebTracker && el) el.textContent = window.WebTracker.getSessionId().slice(0,8) + '…';
+    }, 200);
+  });
+</script>
+</body>
+</html>
