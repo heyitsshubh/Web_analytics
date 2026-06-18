@@ -84,7 +84,18 @@
     .page-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
     .page-links a:hover { color: var(--text); }
     @media(max-width:768px){ .grid{grid-template-columns:1fr;} .card.popular{transform:none;} }
-  </style>
+  
+.back-to-dash {
+  position: fixed; bottom: 20px; left: 20px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff !important; font-weight: 600; padding: 10px 16px;
+  border-radius: 12px; font-size: 0.85rem; z-index: 999;
+  box-shadow: 0 8px 32px rgba(99,102,241,0.4);
+  display: flex; align-items: center; gap: 6px; text-decoration: none;
+  transition: transform 0.2s;
+}
+.back-to-dash:hover { transform: translateY(-2px); text-decoration: none; }
+</style>
 </head>
 <body>
 
@@ -215,5 +226,13 @@
     }, 200);
   });
 </script>
+
+<a href="/dashboard" class="back-to-dash">
+  <svg style="width:16px;height:16px" viewBox="0 0 20 20" fill="currentColor">
+    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+  </svg>
+  Back to Dashboard
+</a>
 </body>
 </html>
+
