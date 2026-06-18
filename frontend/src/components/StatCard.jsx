@@ -1,19 +1,3 @@
-/**
- * StatCard Component
- * ===================
- * Reusable metric card for the overview dashboard.
- * Displays an icon, value, label, and optional trend indicator.
- *
- * Props:
- *  - title     {string}       Card label
- *  - value     {string|number} Main metric value
- *  - icon      {ReactNode}    Icon element
- *  - gradient  {string}       Tailwind gradient class for icon background
- *  - trend     {string}       Optional trend text (e.g. "+12% vs yesterday")
- *  - trendUp   {boolean}      true = green trend, false = red trend
- *  - loading   {boolean}      Show skeleton shimmer
- *  - subtitle  {string}       Optional subtitle under value
- */
 
 export default function StatCard({
   title,
@@ -37,13 +21,10 @@ export default function StatCard({
 
   return (
     <div className="stat-card group">
-      {/* Background glow on hover */}
       <div
         className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl pointer-events-none ${gradient}`}
         style={{ opacity: 0, filter: 'blur(40px)', transform: 'scale(0.8)' }}
       />
-
-      {/* Icon */}
       <div
         className={`w-11 h-11 rounded-xl ${gradient} flex items-center justify-center mb-4 shadow-card flex-shrink-0`}
       >
@@ -51,8 +32,6 @@ export default function StatCard({
           {icon}
         </span>
       </div>
-
-      {/* Value */}
       <div className="space-y-1">
         <p className="text-3xl font-bold text-slate-100 tabular-nums">
           {typeof value === 'number' ? value.toLocaleString() : value}
@@ -62,8 +41,6 @@ export default function StatCard({
           <p className="text-xs text-slate-500">{subtitle}</p>
         )}
       </div>
-
-      {/* Trend badge */}
       {trend && (
         <div className="mt-3 pt-3 border-t border-card-border">
           <span

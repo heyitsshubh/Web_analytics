@@ -1,16 +1,4 @@
-/**
- * TimelineEvent Component
- * ========================
- * Renders a single event entry in the user journey timeline.
- * Visually distinguishes between page_view and click event types.
- *
- * Props:
- *  - event       {Object}  The event data object
- *  - isLast      {boolean} If true, hides the vertical connector line below
- *  - index       {number}  Position in the timeline (for staggered animation)
- */
 
-/* ─────────────────────── Event Config Map ───────────────────────────── */
 
 const EVENT_CONFIG = {
   page_view: {
@@ -37,9 +25,6 @@ const EVENT_CONFIG = {
     cardClass: 'border-brand/20 bg-brand/5',
   },
 };
-
-/* ─────────────────────── Utility: Format Time ───────────────────────── */
-
 function formatTime(timestamp) {
   try {
     const date = new Date(timestamp);
@@ -66,7 +51,6 @@ function formatDate(timestamp) {
   }
 }
 
-/* ─────────────────────── Component ─────────────────────────────────── */
 
 export default function TimelineEvent({ event, isLast = false, index = 0 }) {
   const config = EVENT_CONFIG[event.event_type] || EVENT_CONFIG.page_view;
@@ -76,21 +60,15 @@ export default function TimelineEvent({ event, isLast = false, index = 0 }) {
       className="flex gap-4 animate-slide-up"
       style={{ animationDelay: `${index * 60}ms`, animationFillMode: 'backwards' }}
     >
-      {/* ── Timeline Column ── */}
       <div className="flex flex-col items-center flex-shrink-0 pt-1">
-        {/* Event dot */}
         <div
           className={`w-3 h-3 rounded-full flex-shrink-0 ${config.dotClass} ring-4 ring-surface ring-offset-0`}
         />
-        {/* Connector line */}
         {!isLast && (
           <div className="timeline-line mt-1 flex-1" />
         )}
       </div>
-
-      {/* ── Event Card ── */}
       <div className={`flex-1 mb-4 glass-card p-4 border ${config.cardClass}`}>
-        {/* Header */}
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-2">
             <span className={`badge ${config.badgeClass} gap-1`}>
@@ -103,8 +81,6 @@ export default function TimelineEvent({ event, isLast = false, index = 0 }) {
             <p className="text-[10px] text-slate-500 mt-0.5">{formatDate(event.timestamp)}</p>
           </div>
         </div>
-
-        {/* Event Details */}
         {event.event_type === 'page_view' && (
           <div className="flex items-center gap-2">
             <svg className="w-3.5 h-3.5 text-slate-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
@@ -121,7 +97,6 @@ export default function TimelineEvent({ event, isLast = false, index = 0 }) {
 
         {event.event_type === 'click' && (
           <div className="space-y-2">
-            {/* URL */}
             <div className="flex items-center gap-2">
               <svg className="w-3.5 h-3.5 text-slate-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" />
@@ -130,8 +105,6 @@ export default function TimelineEvent({ event, isLast = false, index = 0 }) {
                 {event.page_url}
               </p>
             </div>
-
-            {/* Coordinates */}
             {event.metadata?.x !== null && event.metadata?.y !== null && (
               <div className="flex items-center gap-3 mt-1">
                 <div className="flex items-center gap-1.5 bg-card rounded-lg px-3 py-1.5">

@@ -1,14 +1,3 @@
-/**
- * EmptyState Component
- * =====================
- * Shown when a data list has zero items or a query returns no results.
- *
- * Props:
- *  - icon    {ReactNode} Icon element (defaults to inbox icon)
- *  - title   {string}   Primary message
- *  - message {string}   Secondary/hint message
- *  - action  {ReactNode} Optional CTA button
- */
 
 const DefaultIcon = () => (
   <svg

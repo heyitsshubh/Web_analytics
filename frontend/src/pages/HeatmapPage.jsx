@@ -1,30 +1,9 @@
-/**
- * Heatmap Page
- * =============
- * Visualizes click event density for a selected page URL.
- *
- * Features:
- *  - URL select dropdown (from API) + manual URL input
- *  - Normalized click dot overlay on a webpage canvas
- *  - Color intensity based on click density (blue → red)
- *  - Click count stats, legend, and export info
- *
- * Route: /heatmap
- */
 
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import EmptyState from '../components/EmptyState';
 import { fetchHeatmapData, fetchHeatmapPages } from '../api/analytics';
-
-/* ─────────────────────── Colour Scale ──────────────────────────────── */
-
-/**
- * Maps a normalised intensity (0→1) to an HSLA colour.
- * Low intensity → cool blue. High intensity → hot red.
- */
 function intensityToColor(intensity) {
-  // HSL: 240 (blue) → 0 (red)
   const hue = (1 - intensity) * 240;
   const opacity = 0.25 + intensity * 0.55; // range 0.25–0.8
   return `hsla(${hue}, 90%, 60%, ${opacity})`;
@@ -35,23 +14,13 @@ function intensityToGlow(intensity) {
   return `hsla(${hue}, 90%, 60%, 0.4)`;
 }
 
-/* ─────────────────────── Dot size scale ────────────────────────────── */
-
 function dotSize(intensity) {
-  return 14 + Math.round(intensity * 24); // 14px – 38px
+  return 14 + Math.round(intensity * 24); 
 }
-
-/* ─────────────────────── Density grouping ───────────────────────────── */
-
-/**
- * Groups nearby clicks into cells and computes the max count per cell
- * to normalise intensities.
- */
 function computeIntensities(points, containerW, containerH, sourceW, sourceH, cellSize = 40) {
   const cells = {};
 
   points.forEach(({ x, y }) => {
-    // Scale original coordinates to container
     const cx = Math.round(((x / sourceW) * containerW) / cellSize) * cellSize;
     const cy = Math.round(((y / sourceH) * containerH) / cellSize) * cellSize;
     const key = `${cx},${cy}`;
@@ -59,8 +28,6 @@ function computeIntensities(points, containerW, containerH, sourceW, sourceH, ce
   });
 
   const maxCount = Math.max(...Object.values(cells), 1);
-
-  // Map each original point to its cell intensity
   return points.map(({ x, y, timestamp }) => {
     const scaledX = (x / sourceW) * containerW;
     const scaledY = (y / sourceH) * containerH;
@@ -76,9 +43,6 @@ function computeIntensities(points, containerW, containerH, sourceW, sourceH, ce
     };
   });
 }
-
-/* ─────────────────────── Component ─────────────────────────────────── */
-
 export default function HeatmapPage() {
   const containerRef = useRef(null);
 
@@ -93,12 +57,8 @@ export default function HeatmapPage() {
   const [error, setError] = useState(null);
 
   const [containerSize, setContainerSize] = useState({ w: 960, h: 540 });
-
-  // Source viewport assumptions (typical desktop)
   const SOURCE_W = 1280;
   const SOURCE_H = 800;
-
-  /* ── Load available pages ── */
   useEffect(() => {
     const load = async () => {
       try {
@@ -106,15 +66,12 @@ export default function HeatmapPage() {
         setPages(data);
         if (data.length) setSelectedUrl(data[0]);
       } catch {
-        // Non-critical; user can still type a URL manually
       } finally {
         setPagesLoading(false);
       }
     };
     load();
   }, []);
-
-  /* ── Track container size ── */
   useEffect(() => {
     if (!containerRef.current) return;
     const observer = new ResizeObserver((entries) => {
@@ -124,8 +81,6 @@ export default function HeatmapPage() {
     observer.observe(containerRef.current);
     return () => observer.disconnect();
   }, []);
-
-  /* ── Fetch heatmap data ── */
   const loadHeatmap = useCallback(async () => {
     const url = useCustom ? customUrl.trim() : selectedUrl;
     if (!url) return;
@@ -141,8 +96,6 @@ export default function HeatmapPage() {
       setLoading(false);
     }
   }, [useCustom, customUrl, selectedUrl]);
-
-  /* ── Computed dots with intensity ── */
   const dots = useMemo(() => {
     if (!heatmapData?.data?.length) return [];
     return computeIntensities(
@@ -156,13 +109,10 @@ export default function HeatmapPage() {
 
   const clickCount = heatmapData?.count ?? 0;
   const maxIntensity = dots.length ? Math.max(...dots.map((d) => d.intensity)) : 0;
-
-  /* ── Active URL ── */
   const activeUrl = useCustom ? customUrl : selectedUrl;
 
   return (
     <div className="page-container">
-      {/* ── Header ── */}
       <div className="section-header">
         <div>
           <h2 className="section-title text-gradient">Click Heatmap</h2>
@@ -179,11 +129,8 @@ export default function HeatmapPage() {
           </div>
         )}
       </div>
-
-      {/* ── URL Selector Card ── */}
       <div className="glass-card p-5 mb-6">
         <div className="flex flex-col lg:flex-row gap-4">
-          {/* Toggle: dropdown vs custom */}
           <div className="flex gap-2">
             <button
               className={`btn text-sm px-4 py-2 ${!useCustom ? 'btn-primary' : 'btn-secondary'}`}
@@ -198,8 +145,6 @@ export default function HeatmapPage() {
               Custom URL
             </button>
           </div>
-
-          {/* URL Input */}
           <div className="flex-1 flex gap-3">
             {useCustom ? (
               <input
@@ -249,8 +194,6 @@ export default function HeatmapPage() {
             </button>
           </div>
         </div>
-
-        {/* Active URL chip */}
         {activeUrl && (
           <div className="mt-3 flex items-center gap-2 text-xs text-slate-500">
             <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
@@ -260,8 +203,6 @@ export default function HeatmapPage() {
           </div>
         )}
       </div>
-
-      {/* ── Error Banner ── */}
       {error && (
         <div className="mb-6 p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-3">
           <svg className="w-5 h-5 text-rose-400 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
@@ -270,10 +211,7 @@ export default function HeatmapPage() {
           <p className="text-sm text-rose-300">{error}</p>
         </div>
       )}
-
-      {/* ── Heatmap Canvas ── */}
       <div className="glass-card overflow-hidden">
-        {/* Canvas header */}
         <div className="px-5 py-3 border-b border-card-border flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-rose-500" />
@@ -289,22 +227,17 @@ export default function HeatmapPage() {
             </span>
           )}
         </div>
-
-        {/* Canvas area */}
         <div
           ref={containerRef}
           id="heatmap-container"
           className="relative w-full bg-slate-900/50"
           style={{ height: '540px' }}
         >
-          {/* Loading overlay */}
           {loading && (
             <div className="absolute inset-0 flex items-center justify-center z-10 bg-surface/80 backdrop-blur-sm">
               <LoadingSpinner message="Generating heatmap..." />
             </div>
           )}
-
-          {/* Empty / initial state */}
           {!loading && !heatmapData && (
             <div className="absolute inset-0 flex items-center justify-center">
               <EmptyState
@@ -318,8 +251,6 @@ export default function HeatmapPage() {
               />
             </div>
           )}
-
-          {/* No clicks for this URL */}
           {!loading && heatmapData && clickCount === 0 && (
             <div className="absolute inset-0 flex items-center justify-center">
               <EmptyState
@@ -333,25 +264,17 @@ export default function HeatmapPage() {
               />
             </div>
           )}
-
-          {/* Webpage wireframe overlay */}
           {!loading && heatmapData && clickCount > 0 && (
             <>
-              {/* Subtle page wireframe guides */}
               <div className="absolute inset-0 pointer-events-none opacity-10">
-                {/* Nav bar */}
                 <div className="h-12 bg-slate-400 mx-4 mt-4 rounded-lg" />
-                {/* Hero */}
                 <div className="h-32 bg-slate-500 mx-4 mt-3 rounded-lg" />
-                {/* Content grid */}
                 <div className="grid grid-cols-3 gap-3 mx-4 mt-3">
                   {[...Array(6)].map((_, i) => (
                     <div key={i} className="h-20 bg-slate-500 rounded-lg" />
                   ))}
                 </div>
               </div>
-
-              {/* Click Dots */}
               {dots.map((dot, i) => {
                 const size = dotSize(dot.intensity);
                 const color = intensityToColor(dot.intensity);
@@ -377,11 +300,8 @@ export default function HeatmapPage() {
           )}
         </div>
       </div>
-
-      {/* ── Legend + Stats ── */}
       {heatmapData && clickCount > 0 && (
         <div className="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-5 animate-fade-in">
-          {/* Legend */}
           <div className="glass-card p-5">
             <h4 className="text-sm font-semibold text-slate-300 mb-3">Click Intensity Legend</h4>
             <div className="flex items-center gap-1 h-5 rounded-full overflow-hidden">
@@ -403,8 +323,6 @@ export default function HeatmapPage() {
               <span className="text-xs text-slate-500">High activity</span>
             </div>
           </div>
-
-          {/* Click stats */}
           <div className="glass-card p-5">
             <h4 className="text-sm font-semibold text-slate-300 mb-3">Heatmap Stats</h4>
             <div className="grid grid-cols-2 gap-4">

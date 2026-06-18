@@ -1,7 +1,4 @@
 import { NavLink, useLocation } from 'react-router-dom';
-
-/* ─────────────────────── Navigation Items ───────────────────────────── */
-
 const navItems = [
   {
     to: '/',
@@ -31,23 +28,13 @@ const navItems = [
     ),
   },
 ];
-
-/* ─────────────────────── Sidebar Component ──────────────────────────── */
-
-/**
- * Persistent left sidebar with navigation and branding.
- * Fixed position, full height.
- */
 export default function Sidebar() {
   const location = useLocation();
 
   return (
     <aside className="fixed left-0 top-0 h-full w-64 flex flex-col bg-surface-100 border-r border-card-border z-40">
-
-      {/* ── Brand / Logo ── */}
       <div className="px-6 pt-6 pb-4">
         <div className="flex items-center gap-3">
-          {/* Logo mark */}
           <div className="w-9 h-9 rounded-xl bg-brand-gradient flex items-center justify-center shadow-glow-brand flex-shrink-0">
             <svg className="w-5 h-5 text-white" viewBox="0 0 20 20" fill="currentColor">
               <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
@@ -58,18 +45,12 @@ export default function Sidebar() {
             <p className="text-[11px] text-slate-500 mt-0.5 font-medium">Behavior Tracker</p>
           </div>
         </div>
-
-        {/* Live indicator */}
         <div className="mt-4 flex items-center gap-2 px-3 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
           <span className="dot-online flex-shrink-0" />
           <span className="text-xs text-emerald-400 font-medium">Tracking Live</span>
         </div>
       </div>
-
-      {/* ── Divider ── */}
       <div className="divider mx-4" />
-
-      {/* ── Navigation ── */}
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto no-scrollbar">
         <p className="px-3 mb-3 text-[10px] font-semibold text-slate-500 uppercase tracking-widest">
           Navigation
@@ -98,8 +79,6 @@ export default function Sidebar() {
           );
         })}
       </nav>
-
-      {/* ── Footer ── */}
       <div className="px-4 py-4 border-t border-card-border">
         <div className="glass-card p-3">
           <p className="text-[11px] text-slate-500 font-medium">API Endpoint</p>

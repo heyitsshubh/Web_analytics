@@ -1,14 +1,5 @@
-/**
- * Analytics API Client
- * =====================
- * Centralised Axios instance and typed API helpers for all backend endpoints.
- * All functions are async and return the unwrapped `data` field from responses.
- */
 
 import axios from 'axios';
-
-/* ─────────────────────── Axios Instance ────────────────────────────── */
-
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
   timeout: 15000,
@@ -17,9 +8,6 @@ const api = axios.create({
     Accept: 'application/json',
   },
 });
-
-/* ─────────────────────── Response Interceptor ───────────────────────── */
-
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -27,13 +15,9 @@ api.interceptors.response.use(
       error.response?.data?.message ||
       error.message ||
       'An unexpected error occurred';
-    // Rethrow with a clean message for components to display
     return Promise.reject(new Error(message));
   }
 );
-
-/* ─────────────────────── API Methods ───────────────────────────────── */
-
 /**
  * Fetch high-level dashboard statistics.
  * @returns {{ total_events, total_sessions, page_views, clicks, top_pages, events_last_24h }}
@@ -44,7 +28,7 @@ export const fetchStats = async () => {
 };
 
 /**
- * Fetch all sessions with aggregated metrics.
+ * 
  * @returns {Array<{ session_id, total_events, page_views, clicks, unique_pages, first_seen, last_seen }>}
  */
 export const fetchSessions = async () => {
@@ -53,7 +37,7 @@ export const fetchSessions = async () => {
 };
 
 /**
- * Fetch the full event timeline for a specific session.
+ * 
  * @param {string} sessionId
  * @returns {Array<{ event_type, page_url, timestamp, metadata }>}
  */
@@ -63,8 +47,8 @@ export const fetchSessionEvents = async (sessionId) => {
 };
 
 /**
- * Fetch click heatmap data for a specific page URL.
- * @param {string} pageUrl - The full page URL to filter by
+ *
+ * @param {string} pageUrl 
  * @returns {Array<{ x, y, timestamp }>}
  */
 export const fetchHeatmapData = async (pageUrl) => {
@@ -75,8 +59,8 @@ export const fetchHeatmapData = async (pageUrl) => {
 };
 
 /**
- * Fetch all unique page URLs that have recorded click events.
- * Used to populate the heatmap URL dropdown.
+ * 
+ *
  * @returns {string[]}
  */
 export const fetchHeatmapPages = async () => {

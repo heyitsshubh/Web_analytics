@@ -1,11 +1,3 @@
-/**
- * User Journey Page
- * ==================
- * Displays the full chronological event timeline for a single session.
- * Shows page views and clicks in sequence with timestamps and metadata.
- *
- * Route: /sessions/:sessionId
- */
 
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -13,8 +5,6 @@ import TimelineEvent from '../components/TimelineEvent';
 import LoadingSpinner from '../components/LoadingSpinner';
 import EmptyState from '../components/EmptyState';
 import { fetchSessionEvents } from '../api/analytics';
-
-/* ─────────────────────── Utility ───────────────────────────────────── */
 
 function formatDateTime(dateStr) {
   if (!dateStr) return '—';
@@ -39,7 +29,6 @@ function sessionDuration(events) {
   return `${Math.floor(m / 60)}h ${m % 60}m`;
 }
 
-/* ─────────────────────── Component ─────────────────────────────────── */
 
 export default function UserJourneyPage() {
   const { sessionId } = useParams();
@@ -48,7 +37,7 @@ export default function UserJourneyPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('all'); // 'all' | 'page_view' | 'click'
+  const [filter, setFilter] = useState('all'); 
 
   const loadEvents = useCallback(async () => {
     if (!sessionId) return;
@@ -67,25 +56,18 @@ export default function UserJourneyPage() {
   useEffect(() => {
     loadEvents();
   }, [loadEvents]);
-
-  /* ── Derived Stats ── */
   const events = data?.data || [];
   const pageViews = events.filter((e) => e.event_type === 'page_view').length;
   const clicks = events.filter((e) => e.event_type === 'click').length;
   const uniquePages = new Set(events.map((e) => e.page_url)).size;
   const duration = sessionDuration(events);
-
-  /* ── Filtered Events ── */
   const filteredEvents = filter === 'all'
     ? events
     : events.filter((e) => e.event_type === filter);
-
-  /* ── Loading ── */
   if (loading) {
     return <LoadingSpinner fullPage message="Loading user journey..." />;
   }
 
-  /* ── Error ── */
   if (error) {
     return (
       <div className="page-container">
@@ -112,7 +94,6 @@ export default function UserJourneyPage() {
 
   return (
     <div className="page-container">
-      {/* ── Breadcrumb / Back ── */}
       <button
         className="btn-ghost mb-6 -ml-2"
         onClick={() => navigate('/sessions')}
@@ -122,8 +103,6 @@ export default function UserJourneyPage() {
         </svg>
         Back to Sessions
       </button>
-
-      {/* ── Session Header ── */}
       <div className="glass-card p-6 mb-8">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
           <div>
@@ -139,8 +118,6 @@ export default function UserJourneyPage() {
               </p>
             )}
           </div>
-
-          {/* ── Session Meta Badges ── */}
           <div className="flex flex-wrap gap-3 lg:flex-col lg:items-end">
             <div className="flex items-center gap-2 bg-card px-4 py-2 rounded-xl border border-card-border">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
@@ -171,8 +148,6 @@ export default function UserJourneyPage() {
           </div>
         </div>
       </div>
-
-      {/* ── Filter Tabs ── */}
       <div className="flex items-center gap-2 mb-6">
         <p className="text-sm text-slate-400 mr-2">Filter:</p>
         {[
@@ -193,8 +168,6 @@ export default function UserJourneyPage() {
           </button>
         ))}
       </div>
-
-      {/* ── Timeline ── */}
       <div className="max-w-2xl">
         {!filteredEvents.length ? (
           <EmptyState
@@ -211,8 +184,6 @@ export default function UserJourneyPage() {
                 index={idx}
               />
             ))}
-
-            {/* End of journey marker */}
             <div className="flex items-center gap-3 mt-2 animate-fade-in">
               <div className="w-3 h-3 rounded-full bg-slate-600 ring-4 ring-surface" />
               <p className="text-xs text-slate-500 italic">End of session</p>

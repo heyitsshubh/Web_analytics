@@ -1,14 +1,3 @@
-/**
- * Overview Page — Dashboard Home
- * ================================
- * Displays:
- *  - Getting Started onboarding guide (dismissable)
- *  - 4 stat cards (Total Sessions, Events, Page Views, Clicks)
- *  - Top 5 pages bar chart
- *  - Recent sessions table
- *
- * Route: /
- */
 
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -16,9 +5,6 @@ import StatCard from '../components/StatCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 import EmptyState from '../components/EmptyState';
 import { fetchStats, fetchSessions } from '../api/analytics';
-
-/* ─────────────────────── Utility Functions ──────────────────────────── */
-
 function formatRelativeTime(dateStr) {
   if (!dateStr) return 'N/A';
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -38,9 +24,6 @@ function formatUrl(url) {
     return url;
   }
 }
-
-/* ─────────────────────── SVG Icons ─────────────────────────────────── */
-
 const Icons = {
   sessions: (
     <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
@@ -64,9 +47,6 @@ const Icons = {
     </svg>
   ),
 };
-
-/* ─────────────────────── Getting Started Steps ─────────────────────── */
-
 const STEPS = [
   {
     number: '01',
@@ -102,13 +82,9 @@ const STEPS = [
     note: 'Dashboard auto-refreshes every 30 seconds',
   },
 ];
-
-/* ─────────────────────── Getting Started Card ───────────────────────── */
-
 function GettingStartedGuide({ onDismiss }) {
   return (
     <div className="mb-8 animate-slide-up">
-      {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
@@ -130,8 +106,6 @@ function GettingStartedGuide({ onDismiss }) {
           Hide
         </button>
       </div>
-
-      {/* Steps */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {STEPS.map((step, idx) => (
           <div
@@ -139,13 +113,10 @@ function GettingStartedGuide({ onDismiss }) {
             className="glass-card p-5 relative overflow-hidden group"
             style={{ animationDelay: `${idx * 80}ms` }}
           >
-            {/* Glow bg */}
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"
               style={{ background: `radial-gradient(ellipse at top left, ${step.glow}, transparent 70%)` }}
             />
-
-            {/* Step number + icon */}
             <div className="flex items-center gap-3 mb-4">
               <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center flex-shrink-0 shadow-card`}>
                 <span className="text-lg">{step.icon}</span>
@@ -154,14 +125,8 @@ function GettingStartedGuide({ onDismiss }) {
                 STEP {step.number}
               </span>
             </div>
-
-            {/* Title */}
             <h4 className="text-sm font-bold text-slate-100 mb-2">{step.title}</h4>
-
-            {/* Description */}
             <p className="text-xs text-slate-400 leading-relaxed mb-3">{step.description}</p>
-
-            {/* Code snippet */}
             {step.code && (
               <div className="bg-surface rounded-lg px-3 py-2 mb-3 border border-card-border flex items-center justify-between gap-2 group/code">
                 <code className="text-xs text-emerald-400 font-mono">{step.code}</code>
@@ -177,8 +142,6 @@ function GettingStartedGuide({ onDismiss }) {
                 </button>
               </div>
             )}
-
-            {/* Links */}
             {step.links && (
               <div className="space-y-1.5 mb-3">
                 {step.links.map((link) => (
@@ -201,16 +164,12 @@ function GettingStartedGuide({ onDismiss }) {
                 ))}
               </div>
             )}
-
-            {/* Note */}
             <div className="flex items-start gap-1.5 mt-auto">
               <svg className="w-3 h-3 text-amber-400 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>
               <p className="text-[10px] text-slate-500 leading-relaxed">{step.note}</p>
             </div>
-
-            {/* Connector arrow (between cards on desktop) */}
             {idx < STEPS.length - 1 && (
               <div className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-card border border-card-border items-center justify-center">
                 <svg className="w-3 h-3 text-slate-500" viewBox="0 0 20 20" fill="currentColor">
@@ -221,8 +180,6 @@ function GettingStartedGuide({ onDismiss }) {
           </div>
         ))}
       </div>
-
-      {/* Bottom tip */}
       <div className="mt-4 p-3 bg-brand/10 border border-brand/20 rounded-xl flex items-center gap-3">
         <span className="text-lg flex-shrink-0">💡</span>
         <p className="text-xs text-slate-300 leading-relaxed">
@@ -235,8 +192,6 @@ function GettingStartedGuide({ onDismiss }) {
   );
 }
 
-/* ─────────────────────── Component ─────────────────────────────────── */
-
 export default function OverviewPage() {
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
@@ -244,8 +199,6 @@ export default function OverviewPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
-
-  // Guide visibility — persisted in localStorage so it can be dismissed
   const [showGuide, setShowGuide] = useState(() => {
     return localStorage.getItem('_wa_guide_dismissed') !== 'true';
   });
@@ -279,8 +232,6 @@ export default function OverviewPage() {
   }, [loadData]);
 
   const hasData = stats && stats.total_events > 0;
-
-  /* ── Error State ── */
   if (error && !stats) {
     return (
       <div className="page-container">
@@ -300,8 +251,6 @@ export default function OverviewPage() {
 
   return (
     <div className="page-container">
-
-      {/* ── Page Header ── */}
       <div className="section-header">
         <div>
           <h2 className="section-title flex items-center gap-2">
@@ -317,7 +266,6 @@ export default function OverviewPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {/* Show guide toggle */}
           {!showGuide && (
             <button
               className="btn-ghost text-xs"
@@ -340,11 +288,7 @@ export default function OverviewPage() {
           </button>
         </div>
       </div>
-
-      {/* ── Getting Started Guide ── */}
       {showGuide && <GettingStartedGuide onDismiss={handleDismissGuide} />}
-
-      {/* ── No Data Banner ── */}
       {!loading && !hasData && !showGuide && (
         <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/25 rounded-xl flex items-center gap-3 animate-fade-in">
           <span className="text-xl flex-shrink-0">👆</span>
@@ -363,8 +307,6 @@ export default function OverviewPage() {
           </p>
         </div>
       )}
-
-      {/* ── Stat Cards Grid ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
         <StatCard
           loading={loading}
@@ -399,11 +341,7 @@ export default function OverviewPage() {
           subtitle="User interactions"
         />
       </div>
-
-      {/* ── Bottom Row ── */}
       <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
-
-        {/* ── Top Pages ── */}
         <div className="xl:col-span-2 glass-card p-6">
           <h3 className="text-base font-semibold text-slate-200 mb-4 flex items-center gap-2">
             <svg className="w-4 h-4 text-brand-light" viewBox="0 0 20 20" fill="currentColor">
@@ -445,7 +383,6 @@ export default function OverviewPage() {
           )}
         </div>
 
-        {/* ── Recent Sessions ── */}
         <div className="xl:col-span-3 glass-card p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-base font-semibold text-slate-200 flex items-center gap-2">

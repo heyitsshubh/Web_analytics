@@ -1,19 +1,10 @@
-/**
- * Sessions Page
- * ==============
- * Lists all tracked sessions with aggregated metrics.
- * Features: search, sort, clickable rows → user journey.
- *
- * Route: /sessions
- */
+
 
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 import EmptyState from '../components/EmptyState';
 import { fetchSessions } from '../api/analytics';
-
-/* ─────────────────────── Utilities ─────────────────────────────────── */
 
 function formatDateTime(dateStr) {
   if (!dateStr) return '—';
@@ -47,7 +38,6 @@ function sessionDuration(first, last) {
   return `${Math.floor(m / 60)}h ${m % 60}m`;
 }
 
-/* ─────────────────────── Component ─────────────────────────────────── */
 
 export default function SessionsPage() {
   const navigate = useNavigate();
@@ -75,18 +65,13 @@ export default function SessionsPage() {
   useEffect(() => {
     loadSessions();
   }, [loadSessions]);
-
-  /* ── Filtered & Sorted Sessions ── */
   const displayed = useMemo(() => {
     let list = sessions.filter((s) =>
       s.session_id.toLowerCase().includes(search.toLowerCase())
     );
-
     list.sort((a, b) => {
       let av = a[sortKey];
       let bv = b[sortKey];
-
-      // Date comparison
       if (sortKey === 'first_seen' || sortKey === 'last_seen') {
         av = new Date(av).getTime();
         bv = new Date(bv).getTime();
@@ -108,8 +93,6 @@ export default function SessionsPage() {
       setSortDir('desc');
     }
   };
-
-  /* ── Sort Icon ── */
   const SortIcon = ({ col }) => {
     if (sortKey !== col) {
       return (
@@ -128,8 +111,6 @@ export default function SessionsPage() {
       </svg>
     );
   };
-
-  /* ── Column Header ── */
   const ColHeader = ({ col, label }) => (
     <th
       className="cursor-pointer select-none hover:text-slate-200 transition-colors"
@@ -146,7 +127,6 @@ export default function SessionsPage() {
 
   return (
     <div className="page-container">
-      {/* ── Header ── */}
       <div className="section-header">
         <div>
           <h2 className="section-title text-gradient">Sessions</h2>
@@ -161,8 +141,6 @@ export default function SessionsPage() {
           Refresh
         </button>
       </div>
-
-      {/* ── Error Banner ── */}
       {error && (
         <div className="mb-6 p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-3">
           <svg className="w-5 h-5 text-rose-400 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
@@ -171,8 +149,6 @@ export default function SessionsPage() {
           <p className="text-sm text-rose-300">{error}</p>
         </div>
       )}
-
-      {/* ── Search Bar ── */}
       <div className="mb-6 relative">
         <svg
           className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"
@@ -190,8 +166,6 @@ export default function SessionsPage() {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-
-      {/* ── Table ── */}
       {!sessions.length ? (
         <div className="glass-card p-8">
           <EmptyState
@@ -282,7 +256,6 @@ export default function SessionsPage() {
               </tbody>
             </table>
           </div>
-          {/* Footer count */}
           <div className="px-4 py-3 border-t border-card-border flex items-center justify-between">
             <p className="text-xs text-slate-500">
               Showing <span className="text-slate-300 font-medium">{displayed.length}</span> of{' '}
