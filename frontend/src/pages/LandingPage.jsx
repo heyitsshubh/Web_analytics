@@ -6,20 +6,20 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-bg text-text flex flex-col font-sans">
       {/* Navbar */}
-      <nav className="flex items-center justify-between px-8 py-5 border-b border-card-border bg-surface/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-brand-gradient flex items-center justify-center shadow-glow-brand">
-            <svg className="w-4 h-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+      <nav className="flex items-center justify-between px-4 md:px-8 py-4 md:py-5 border-b border-card-border bg-surface/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
+          <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-brand-gradient flex items-center justify-center shadow-glow-brand">
+            <svg className="w-3 h-3 md:w-4 md:h-4 text-white" viewBox="0 0 20 20" fill="currentColor">
               <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
             </svg>
           </div>
-          <h1 className="text-xl font-bold text-slate-100">WebAnalytics</h1>
+          <h1 className="text-lg md:text-xl font-bold text-slate-100 hidden sm:block">WebAnalytics</h1>
         </div>
-        <div className="flex gap-4">
-          <a href="/demo/index.html" target="_blank" rel="noreferrer" className="btn-outline px-4 py-2 text-sm">
-            View Demo Pages
+        <div className="flex items-center gap-2 md:gap-4">
+          <a href="/demo/index.html" target="_blank" rel="noreferrer" className="btn-outline hidden sm:flex px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm">
+            Demo Pages
           </a>
-          <button onClick={() => navigate('/dashboard')} className="btn-primary px-4 py-2 text-sm">
+          <button onClick={() => navigate('/dashboard')} className="btn-primary px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm whitespace-nowrap">
             Open Dashboard
           </button>
         </div>
@@ -47,7 +47,7 @@ export default function LandingPage() {
         </p>
 
         {/* Getting Started Guide */}
-        <div className="glass-card max-w-3xl w-full p-8 text-left relative z-10 border-brand/30 shadow-[0_0_40px_rgba(99,102,241,0.1)]">
+        <div className="glass-card max-w-3xl w-full p-5 md:p-8 text-left relative z-10 border-brand/30 shadow-[0_0_40px_rgba(99,102,241,0.1)]">
           <div className="flex items-center gap-3 mb-6 border-b border-card-border pb-4">
             <span className="text-2xl">👋</span>
             <div>
