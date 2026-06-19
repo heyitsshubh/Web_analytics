@@ -28,11 +28,11 @@ const navItems = [
     ),
   },
 ];
-export default function Sidebar() {
+export default function Sidebar({ onClose }) {
   const location = useLocation();
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 flex flex-col bg-surface-100 border-r border-card-border z-40">
+    <aside className="h-full w-full flex flex-col bg-surface-100 border-r border-card-border shadow-2xl md:shadow-none">
       <div className="px-6 pt-6 pb-4">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-brand-gradient flex items-center justify-center shadow-glow-brand flex-shrink-0">
@@ -66,6 +66,7 @@ export default function Sidebar() {
             <NavLink
               key={item.to}
               to={item.to}
+              onClick={onClose}
               className={`nav-link ${isActive ? 'active' : ''}`}
             >
               <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center">
